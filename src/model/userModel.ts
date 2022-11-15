@@ -1,4 +1,5 @@
 import { DataTypes, Model } from "sequelize";
+import { db } from "../config";
 
 export interface UserAttributes{
     id: string;
@@ -19,6 +20,7 @@ export interface UserAttributes{
 
 class UserInstance extends 
     Model<UserAttributes>{}
+
     UserInstance.init({
         id: {
             type: DataTypes.UUIDV4,
@@ -31,10 +33,10 @@ class UserInstance extends
             unique: true,
             validate: {
                 notNull: {
-                    message: "Email address is required"
+                    msg: "Email address is required"
                 },
                 isEmail: {
-                    message: "Please provide a valid email"
+                    msg: "Please provide a valid email"
                 }
             }
         },
@@ -43,10 +45,10 @@ class UserInstance extends
             allowNull: false,
             validate: {
                 notNull: {
-                    message: "password is required"
+                    msg: "password is required"
                 },
                 notEmpty: {
-                    message: "provide a password"
+                    msg: "provide a password"
                 }
             }
         },
@@ -61,19 +63,65 @@ class UserInstance extends
         salt: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
+        },
+        address: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        phone: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate:{
                 notNull: {
-                    message: "Salt is required"
-                },
+                    msg: "Phone number is required"
+            },
+            notEmpty: {
+                msg: "provide a phone number"
+            }
             }
         },
-        address:string;
-        phone:string;
-        otp:number;
-        otpExpiry:Date;
-        longitude: number;
-        latitude: number;
-        verified: boolean;
+        otp: {
+            type: DataTypes.NUMBER,
+            allowNull: false,
+            validate:{
+                notNull: {
+                    msg: "Otp is required"
+            },
+            notEmpty: {
+                msg: "provide an otp"
+            }
+            }
+        },
+        otpExpiry: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            validate:{
+                notNull: {
+                    msg: "Otp is expired"
+                }
+            }
+        },
+        longitude: {
+            type: DataTypes.NUMBER,
+            allowNull: true
+        },
+        latitude: {
+            type: DataTypes.NUMBER,
+            allowNull: true
+        },
+        verified: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            validate:{
+                notNull: {
+                    msg: "User must be verified"
+                }
+            }
+        }
+    },
 
-
-    })
+    {
+        sequelize:db,
+        tableName:"user"
+    }
+    );
