@@ -1,9 +1,9 @@
 {
-  "name": "express_rest_crud_api",
+  "name": "food_ordering_fullstack",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/chizobavictory/express_rest_crud_api.git",
-  "author": "Chizoba Victory <chizoba.victory1@gmail.com>",
+  "repository": "https://github.com/yinotherhino/food_ordering_fullstack.git",
+  "author": "Muhammed Bayero <muhammedbayero@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "nodemon dist/app.js",
@@ -17,11 +17,18 @@
     "nodemon": "^2.0.20",
     "sequelize": "^6.25.5",
     "sqlite3": "^5.1.2",
-    "typescript": "^4.8.4"
+    "typescript": "*"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
     "@types/http-errors": "^2.0.1",
-    "@types/morgan": "^1.9.3"
+    "@types/morgan": "^1.9.3",
+    "@types/sequelize": "^4.28.14",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0"
   }
 }
