@@ -18,7 +18,7 @@ export interface UserAttributes{
 
 }
 
-class UserInstance extends 
+export class UserInstance extends 
     Model<UserAttributes>{}
 
     UserInstance.init({
