@@ -1,6 +1,8 @@
 import Joi from "joi";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { appSecret } from "../config";
+import { Authpayload } from "../interface";
 
 export const option = {
     abortEarly: false,
@@ -24,4 +26,12 @@ export const generateSalt = async()=>{
 
 export const generatePassword = async( password: string, salt:string )=>{
     return await bcrypt.hash(password, salt)
+}
+
+export const generateToken = async(payload:Authpayload) => {
+    return jwt.sign(payload, appSecret as string, {expiresIn: "10d"})
+}
+
+export const verifyToken = async(token:string) => {
+    return jwt.verify(token, appSecret)
 }

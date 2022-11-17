@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
-import { generateOtp } from "../utils/otp";
-import {UserInstance} from "../model/userModel"
-import { generatePassword, generateSalt, option, registerSchema } from "../utils/utility";
+import { emailHtml, generateOtp, mailSender, sendOTP } from "../utils/otp";
+import { UserAttributes, UserInstance } from "../model/userModel"
+import { generatePassword, generateSalt, generateToken, option, registerSchema, verifyToken } from "../utils/utility";
 import { v4 as uuidv4 } from "uuid";
+import { config } from 'dotenv';
+import { JwtPayload } from "jsonwebtoken";
+
+config();
 
 export const Register = async (req: Request, res: Response) => {
   try {
@@ -37,10 +41,24 @@ export const Register = async (req: Request, res: Response) => {
           longitude:0, 
           latitude:0, 
           verified:false
+        }) as unknown as UserAttributes
+
+        const isSent = await sendOTP(otp, phone)
+        const html = emailHtml(otp)
+        mailSender(email, otp, html)
+
+        const signature = await generateToken({
+          id: User.id,
+          verified:User.verified,
+          email
         })
 
         return res.status(201).json({
-          message: "user created successfully"
+          message: "user created successfully, check you email or phone for otp",
+          signature,
+          verified:User.verified
+
+
         })
       }
 
@@ -55,3 +73,42 @@ export const Register = async (req: Request, res: Response) => {
     })
   }
 };
+
+export const verifyUser = async(req:Request, res:Response) => {
+  try {
+    const { signature } = req.params;
+    const { email } = await verifyToken(signature) as JwtPayload;
+
+    const User = await UserInstance.findOne({
+      where: { email: email }
+    }) as unknown as UserAttributes
+
+    if(User){
+      const { otp } = req.body
+      if(Number(otp) === User.otp && User.otpExpiry >= (new Date())){
+        const updateUSer = await UserInstance.update(
+          { verified: true },
+          { where: { email: email } }
+        )
+
+      }
+      else{
+        const {otp, expiry} = generateOtp();
+        const isSent = await sendOTP(otp, User.phone)
+        const html = emailHtml(otp)
+        mailSender(User.email, otp, html)
+      }
+    }
+    else{
+      res.status(401).json({
+        Error: "User does not exist."
+      })
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      Error:"Internal server error",
+      route:"/users/verify"
+    })
+  }
+}
