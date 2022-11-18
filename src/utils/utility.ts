@@ -20,6 +20,11 @@ export const registerSchema = Joi.object().keys({
     phone: Joi.string().required()
 })
 
+export const LoginSchema = Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+})
+
 export const generateSalt = async()=>{
     return await bcrypt.genSalt();
 }
@@ -34,4 +39,8 @@ export const generateToken = async(payload:Authpayload) => {
 
 export const verifyToken = async(token:string) => {
     return jwt.verify(token, appSecret)
+}
+
+export const comparePassword = async (inputPassword:string, dbPassword:string, salt:string) => {
+    return await bcrypt.compare(inputPassword, dbPassword)
 }

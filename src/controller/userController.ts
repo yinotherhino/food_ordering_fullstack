@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { emailHtml, generateOtp, mailSender, sendOTP } from "../utils/otp";
 import { UserAttributes, UserInstance } from "../model/userModel";
-import { generatePassword, generateSalt, generateToken, option, registerSchema, verifyToken } from "../utils/utility";
+import { comparePassword, generatePassword, generateSalt, generateToken, LoginSchema, option, registerSchema, verifyToken } from "../utils/utility";
 import { v4 as uuidv4 } from "uuid";
 import { config } from 'dotenv';
 import { JwtPayload } from "jsonwebtoken";
@@ -109,9 +109,9 @@ export const verifyUser = async(req:Request, res:Response) => {
         // const isSent = await sendOTP(otp, User.phone)
         // const html = emailHtml(otp)
         // mailSender(User.email, otp, html)
-        res.status(400).json({
-          Error: "Otp expired."
-        })
+        // return res.status(400).json({
+        //   Error: "Otp expired."
+        // })
       // }
     }
     // else{
@@ -127,3 +127,72 @@ export const verifyUser = async(req:Request, res:Response) => {
     })
   }
 }
+
+
+export const Login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const validateResult = LoginSchema.validate(req.body, option);
+    if (validateResult.error) {
+      res.status(400).json({
+        Error: validateResult.error.details[0].message
+      })
+    }
+    const User = await UserInstance.findOne({ where: { email: email } }) as unknown as UserAttributes;
+    if (User) {
+      const validation = await comparePassword(password, User.password, User.salt);
+      if (validation) {
+        //generate signature
+        let signature = await generateToken({
+          id: User.id,
+          email: User.email,
+          verified: User.verified
+        });
+        return res.status(200).json({
+          message: 'User logged in successfully',
+          signature,
+          email: User.email,
+          verified: User.verified,
+        })
+      }
+    }
+    return res.status(400).json({
+      Error: 'Invalid credentials',
+    })
+  } catch (err) {
+    res.status(500).json({
+      Error: "Internal Server Error",
+      route: "/users/login"
+    })
+  }
+}
+
+
+// export const resendOTP = async (req: Request, res: Response) => {
+//   try {
+//     const token = req.params.signature;
+//     const decode = await verifyToken(token);
+//     const User = await UserInstance.findOne({ where: { email: decode.email } }) as unknown as UserAttributes;
+//     if (User) {
+//       const { otp, expiry } = generateOtp();
+//       const updateUser = await UserInstance.update({ otp, otpExpiry: expiry }, { where: { email: decode.email } }) as unknown as UserAttributes;
+//       if (updateUser) {
+//         const User = await UserInstance.findOne({ where: { email: decode.email } }) as unknown as UserAttributes;
+//         await onRequestOTP(otp, User.phone);
+//         const html = emailHtml(otp);
+//         await mailSender(User.email, userSubject, html);
+//         return res.status(200).json({
+//           message: 'OTP resent successfully',
+//         })
+//       }
+//     }
+//     return res.status(400).json({
+//       Error: "Error resending OTP",
+//     })
+//   } catch (err) {
+//     res.status(500).json({
+//       Error: "Internal Server Error",
+//       route: "/users/resend-otp/:signature"
+//     })
+//   }
+// }
