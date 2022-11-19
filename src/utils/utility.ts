@@ -44,3 +44,10 @@ export const verifyToken = async(token:string) => {
 export const comparePassword = async (inputPassword:string, dbPassword:string, salt:string) => {
     return await bcrypt.compare(inputPassword, dbPassword)
 }
+
+export const updateSchema = Joi.object().keys({
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    address: Joi.string().required(),
+    phone: Joi.string().required()
+})
