@@ -4,9 +4,9 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/users";
 import indexRouter from "./routes/index";
 import { db } from "./config";
-import { config } from 'dotenv';
+import { config } from "dotenv";
 
-config
+config();
 
 db.sync()
   .then(() => {

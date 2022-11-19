@@ -1,5 +1,6 @@
 import { UserInstance } from "../model/userModel";
 import { Request, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
 
 export const getAllUsers = async(req:Request, res:Response) => {
     try {
@@ -22,17 +23,16 @@ export const getAllUsers = async(req:Request, res:Response) => {
     }
   }
 
-  export const getSingleUser = async(req:Request, res:Response) => {
+  export const getSingleUser = async(req:JwtPayload, res:Response) => {
     try {
-      // const users = await UserInstance.findAll({})
-      const id = req.params.id  as string | undefined;
+      const id = req.user.id  as string | undefined;
         const user = await UserInstance.findOne(
             {
             where:{id:id}}
             )
       return res.status(200).json({
-        message: "You have successfully retrieved one users.",
-        Users:user
+        message: "",
+        User:user
       })
   
     } catch (error) {

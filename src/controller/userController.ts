@@ -139,7 +139,7 @@ export const Login = async (req: Request, res: Response) => {
       })
     }
     const User = await UserInstance.findOne({ where: { email: email } }) as unknown as UserAttributes;
-    if (User) {
+    if (User && User.verified === true) {
       const validation = await comparePassword(password, User.password, User.salt);
       if (validation) {
         //generate signature
@@ -157,7 +157,7 @@ export const Login = async (req: Request, res: Response) => {
       }
     }
     return res.status(400).json({
-      Error: 'Invalid credentials',
+      Error: 'Invalid credentials or unverified account',
     })
   } catch (err) {
     res.status(500).json({
