@@ -40,7 +40,9 @@ export const Register = async (req: Request, res: Response) => {
           otpExpiry:expiry, 
           longitude:0, 
           latitude:0, 
-          verified:false
+          verified:false,
+          role:"user"
+          
         }) as unknown as UserAttributes
 
         const isSent = await sendOTP(otp, phone)
@@ -54,7 +56,7 @@ export const Register = async (req: Request, res: Response) => {
         })
 
         return res.status(201).json({
-          message: "user created successfully, check you email or phone for otp",
+          message: "admin created successfully, check you email or phone for otp",
           signature,
           verified:User.verified
         })

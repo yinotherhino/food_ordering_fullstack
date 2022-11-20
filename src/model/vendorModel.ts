@@ -1,27 +1,25 @@
 import { DataTypes, Model } from "sequelize";
 import { db } from "../config";
 
-export interface UserAttributes{
+export interface VendorAttributes{
     id: string;
+    name: string;
+    ownerName:string;
+    pincode:string;
     email: string;
     password: string;
-    firstName: string;
-    lastName: string;
     salt:string;
+    rating:number;
     address:string;
+    serviceAvailable:boolean;
     phone:string;
-    otp:number;
-    otpExpiry:Date;
-    longitude: number;
-    latitude: number;
-    verified: boolean;
-    role: "user" | "admin" | "superadmin"
+    role: "vendor"
 }
 
-export class UserInstance extends 
-    Model<UserAttributes>{}
+export class VendorInstance extends 
+    Model<VendorAttributes>{}
 
-    UserInstance.init({
+    VendorInstance.init({
         id: {
             type: DataTypes.UUIDV4,
             primaryKey: true,
@@ -52,14 +50,6 @@ export class UserInstance extends
                 }
             }
         },
-        firstName: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        lastName: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
         salt: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -80,52 +70,34 @@ export class UserInstance extends
             }
             }
         },
-        otp: {
-            type: DataTypes.NUMBER,
-            allowNull: false,
-            validate:{
-                notNull: {
-                    msg: "Otp is required"
-            },
-            notEmpty: {
-                msg: "provide an otp"
-            }
-            }
-        },
-        otpExpiry: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            validate:{
-                notNull: {
-                    msg: "Otp is expired"
-                }
-            }
-        },
-        longitude: {
-            type: DataTypes.NUMBER,
-            allowNull: true
-        },
-        latitude: {
-            type: DataTypes.NUMBER,
-            allowNull: true
-        },
         role: {
             type: DataTypes.STRING,
             allowNull: true
         },
-        verified: {
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        ownerName:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        pincode:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        rating:{
+            type: DataTypes.NUMBER,
+            allowNull: true
+        },
+        serviceAvailable:{
             type: DataTypes.BOOLEAN,
-            allowNull: false,
-            validate:{
-                notNull: {
-                    msg: "User must be verified"
-                }
-            }
+            allowNull: false
         }
     },
 
     {
         sequelize:db,
-        tableName:"user"
+        tableName:"vendor"
     }
     );

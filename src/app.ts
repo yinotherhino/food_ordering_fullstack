@@ -2,7 +2,9 @@ import express, { Request, Response } from "express";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/users";
+import adminRouter from "./routes/admin";
 import indexRouter from "./routes/index";
+import vendorRouter from "./routes/vendor";
 import { db } from "./config";
 import { config } from "dotenv";
 
@@ -25,6 +27,8 @@ app.use(cookieParser());
 //Router Middleware
 app.use("/", indexRouter);
 app.use("/users", userRouter);
+app.use("/admins", adminRouter);
+app.use("/vendors", vendorRouter);
 
 const port = process.env.PORT || 3500;
 app.listen(port, () => {

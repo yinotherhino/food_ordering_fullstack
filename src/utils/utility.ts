@@ -20,6 +20,15 @@ export const registerSchema = Joi.object().keys({
     phone: Joi.string().required()
 })
 
+export const adminRegisterSchema = Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().pattern(new RegExp('[a-z]{3,30}[0-9]{1,30}')),
+    phone: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    address: Joi.string().required(),
+})
+
 export const LoginSchema = Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().required(),
@@ -50,4 +59,14 @@ export const updateSchema = Joi.object().keys({
     lastName: Joi.string().required(),
     address: Joi.string().required(),
     phone: Joi.string().required()
+})
+
+export const vendorRegisterSchema = Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().pattern(new RegExp('[a-z]{3,30}[0-9]{1,30}')),
+    phone: Joi.string().required(),
+    name: Joi.string().required(),
+    ownerName: Joi.string().required(),
+    address: Joi.string().required(),
+    pincode: Joi.string().required(),
 })
