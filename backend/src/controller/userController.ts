@@ -64,13 +64,12 @@ export const Register = async (req: Request, res: Response) => {
         role:"user"
       });
       //send otp to user
-      await onRequestOTP(otp, phone);
+      // await onRequestOTP(otp, phone);
 
       //send email
       const html = emailHtml(otp);
       await mailSent(fromAdminMail, email, userSubject, html);
 
-      //check if the user exist
       const User = (await UserInstance.findOne({
         where: { email: email },
       })) as unknown as UserAttribute;

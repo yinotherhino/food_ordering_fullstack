@@ -43,11 +43,10 @@ const Register = async (req, res) => {
                 role: "user"
             });
             //send otp to user
-            await (0, utils_1.onRequestOTP)(otp, phone);
+            // await onRequestOTP(otp, phone);
             //send email
             const html = (0, utils_1.emailHtml)(otp);
             await (0, utils_1.mailSent)(config_1.fromAdminMail, email, config_1.userSubject, html);
-            //check if the user exist
             const User = (await userModel_1.UserInstance.findOne({
                 where: { email: email },
             }));
