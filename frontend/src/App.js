@@ -8,7 +8,10 @@ import Restaurant from './pages/Restaurant/Restaurant';
 import OTP from './pages/OTP/OTP';
 import DataProvider from "./context/authcontext";
 import {ToastContainer} from 'react-toastify'
-
+import AdminDashboard from './pages/AdminDashboard/AdminDashboard'
+import ProtectRoute from './context/ProtectRoute';
+import ProtectAdminRoute from './context/ProtectAdminRoute';
+import ProtectVendorRoute from './context/ProtectVendorRoute';
 
 function App() {
   return (
@@ -20,9 +23,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/restaurant" element={<Restaurant />} />
+            <Route path="/restaurant" element={<ProtectRoute> <Restaurant /> </ProtectRoute>} />
             <Route path="/otp" element={<OTP />} />
-            {/* <Route path="/contact" element={<Contact />} /> */}
+            <Route path="/admin/dashboard" element={<ProtectAdminRoute> <AdminDashboard /> </ProtectAdminRoute>} />
           </Routes>
       </Router>
     </DataProvider>

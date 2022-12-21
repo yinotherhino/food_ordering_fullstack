@@ -2,16 +2,18 @@ import React from 'react'
 import '../Register/Register.css'
 import registerbg from '../../assets/registerbg.svg'
 import Card from '../../components/card/Card'
+import Navbar from '../../components/Navbar/Navbar'
 // import { Link } from 'react-router-dom'
 
-const Register = () => {
+const Login = () => {
   return (
     <div className='register-container'>
+  
         <div className ="bg-background">
             <img src={registerbg} alt=" " />
         </div>
-
         <div className='form-style'>
+        
             <Card >
               <form>
                 <div>
@@ -41,4 +43,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Login

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import './Register.css'
 import registerbg from '../../assets/registerbg.svg'
 import Card from '../../components/card/Card'
-import {Link} from "react-router-dom"
+//import {Link} from "react-router-dom"
 import { useAuth } from '../../context/authcontext'
 
 const Register = () => {

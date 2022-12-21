@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = "http://localhost:4000"
+const baseUrl = "http://localhost:4001"
 
 export const apiGet = (path) => {
     const config = {
@@ -9,7 +9,7 @@ export const apiGet = (path) => {
         }
     }
 
-    return axios.get(`${baseUrl}/${path}`,config)
+    return axios.get(`${baseUrl}${path}`,config)
 }
 
 export const apiPost = (path, data) => {
@@ -19,7 +19,7 @@ export const apiPost = (path, data) => {
         }
     }
 
-    return axios.post(`${baseUrl}/${path}`, data, config)
+    return axios.post(`${baseUrl}${path}`, data, config)
 }
 
 export const apiPut = (path, data) => {
@@ -29,7 +29,7 @@ export const apiPut = (path, data) => {
         }
     }
 
-    return axios.put(`${baseUrl}/${path}`,data, config)
+    return axios.put(`${baseUrl}${path}`,data, config)
 }
 
 export const apiPatch = (path, data) => {
@@ -39,7 +39,7 @@ export const apiPatch = (path, data) => {
         }
     }
 
-    return axios.patch(`${baseUrl}/${path}`, data, config)
+    return axios.patch(`${baseUrl}${path}`, data, config)
 }
 
 export const apiDelete = (path) => {
@@ -49,5 +49,5 @@ export const apiDelete = (path) => {
         }
     }
 
-    return axios.delete(`${baseUrl}/${path}`,config)
+    return axios.delete(`${baseUrl}${path}`,config)
 }
